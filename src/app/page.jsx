@@ -35,6 +35,12 @@ export default function Home() {
       >
         Login With Google
       </button>
+      <button
+        className=" p-2 w-full  rounded-md bg-gray-800 text-white text-sm"
+        onClick={() => signIn("github")}
+      >
+        Login With Github
+      </button>
       <Link href="/" className="text-sm" >
         Create New Account
       </Link>
