@@ -1,22 +1,34 @@
-"use client";
+"use client"
 import Link from "next/link";
-import { signIn, useSession } from "next-auth/react";
+import { useState } from "react";
 import { useRouter } from "next/navigation";
 
-export default function Home() {
-  const session = useSession();
+const Register = () => {
+  const [err, setErr] = useState(false);
+
   const router = useRouter();
-
-  if (session.status === "authenticated") {
-    router?.push("/dashboard");
-  }
-
   const handleSubmit = async (e) => {
     e.preventDefault();
     const email = e.target[0].value;
     const password = e.target[1].value;
 
-    signIn("credentials", { email, password });
+    try {
+      const res = await fetch("/api/auth/register", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          email,
+          password,
+        }),
+      });
+
+      res.status === 201 &&
+        router.push("/?success=Account has been created");
+    } catch (error) {
+      setErr(true);
+    }
   };
   return (
     <main className="flex flex-col items-center space-y-2 ">
@@ -34,24 +46,15 @@ export default function Home() {
           className="bg-transparent  border rounded-md p-2"
         />
         <button className="bg-green-400 rounded-md p-2 text-white">
-          Login
+          Register
         </button>
       </form>
-      <button
-        className=" p-2 w-full  rounded-md bg-slate-200 text-black text-sm"
-        onClick={() => signIn("google")}
-      >
-        Login With Google
-      </button>
-      <button
-        className=" p-2 w-full  rounded-md bg-gray-800 text-white text-sm"
-        onClick={() => signIn("github")}
-      >
-        Login With Github
-      </button>
-      <Link href="/register" className="text-sm">
-        Create New Account
+      {err && "Something went wrong!"}
+      <Link className="text-sm" href="/">
+        Already have an account? Login
       </Link>
     </main>
   );
-}
+};
+
+export default Register;
