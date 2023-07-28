@@ -9,8 +9,9 @@ const Register = () => {
   const router = useRouter();
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const email = e.target[0].value;
-    const password = e.target[1].value;
+    const name = e.target[0].value;
+    const email = e.target[1].value;
+    const password = e.target[2].value;
 
     try {
       const res = await fetch("/api/auth/register", {
@@ -19,6 +20,7 @@ const Register = () => {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
+          name,
           email,
           password,
         }),
@@ -33,6 +35,12 @@ const Register = () => {
   return (
     <main className="flex flex-col items-center space-y-2 ">
       <form className="flex flex-col space-y-4" onSubmit={handleSubmit}>
+        <input
+          type="text"
+          placeholder="Name"
+          required
+          className="bg-transparent  border rounded-md p-2"
+        />
         <input
           type="email"
           placeholder="Email"
