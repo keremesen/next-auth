@@ -52,10 +52,7 @@ const Dashboard = () => {
   if (session.status === "authenticated") {
     return (
       <div className="flex flex-col space-y-4">
-        <Sidebar
-          userEmail={session.data.user.email}
-          userName={session.data.user.name}
-        />
+        <Sidebar />
         <p> {session.data.user.email} </p>
         <form onSubmit={handleSubmit} className="flex flex-col">
           <label className="text-sm">Name</label>
@@ -75,12 +72,6 @@ const Dashboard = () => {
           </button>
         </form>
         {err && "Somethgin Went Wrong!"}
-        <button
-          className="p-2 rounded-md bg-slate-200 text-black "
-          onClick={() => signOut()}
-        >
-          Signout
-        </button>
       </div>
     );
   }
