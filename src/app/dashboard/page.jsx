@@ -1,4 +1,5 @@
 "use client";
+import Layout from "@/components/Layout/Layout";
 import Sidebar from "@/components/Sidebar/Sidebar";
 import { signOut, useSession } from "next-auth/react";
 import Image from "next/image";
@@ -46,70 +47,71 @@ const Dashboard = () => {
 
   if (session.status === "authenticated") {
     return (
-      <div className="flex flex-col  ">
-        <Sidebar />
-        <div className="flex h-[524px] overflow-y-scroll rounded-md">
-          <table className="w-full text-sm text-left border-collapse bg-[#4444]">
-            <thead className="font-bold uppercase text-center bg-[#3333] text-[#fff]">
-              <tr>
-                <th scope="col" className="px-12 py-4">
-                  NAME
-                </th>
-                <th scope="col" className="px-12 py-4">
-                  E-MAIL
-                </th>
-                <th scope="col" className="px-12 py-4">
-                  PHONE
-                </th>
-                <th scope="col" className="px-12 py-4"></th>
-              </tr>
-            </thead>
-            <tbody className="text-center">
-              {isLoading ? (
+      <Layout>
+        <div className="flex w-full items-center justify-center">
+          <div className="flex h-[524px] overflow-y-scroll rounded-md ">
+            <table className="w-full text-sm text-left border-collapse bg-[#4444]">
+              <thead className="font-bold uppercase text-center bg-[#3333] text-[#fff]">
                 <tr>
-                  <td colSpan="5" className="px-12 py-4">
-                    Loading
-                  </td>
+                  <th scope="col" className="px-12 py-4">
+                    NAME
+                  </th>
+                  <th scope="col" className="px-12 py-4">
+                    E-MAIL
+                  </th>
+                  <th scope="col" className="px-12 py-4">
+                    PHONE
+                  </th>
+                  <th scope="col" className="px-12 py-4"></th>
                 </tr>
-              ) : (
-                data?.map((item, idx) => (
-                  <tr key={idx} className="border-b font-semibold">
-                    <td className="px-12 py-4">{item.name}</td>
-                    <td className="px-12 py-4">{item.email}</td>
-                    <td className="px-12 py-4">0555 555 55 55</td>
-                    <td className="px-12 py-4">
-                      <div className="flex justify-center">
-                        <Link
-                          href={`/dashboard/user/${item.id}`}
-                          className="mr-2"
-                        >
-                          <Image
-                            alt="edit"
-                            src="/assets/edit.svg"
-                            width={20}
-                            height={20}
-                          />
-                        </Link>
-                        <button
-                          onClick={() => handleDelete(item.id)}
-                          className="mr-2"
-                        >
-                          <Image
-                            alt="bin"
-                            src="/assets/bin.svg"
-                            width={20}
-                            height={20}
-                          />
-                        </button>
-                      </div>
+              </thead>
+              <tbody className="text-center">
+                {isLoading ? (
+                  <tr>
+                    <td colSpan="5" className="px-12 py-4">
+                      Loading
                     </td>
                   </tr>
-                ))
-              )}
-            </tbody>
-          </table>
+                ) : (
+                  data?.map((item, idx) => (
+                    <tr key={idx} className="border-b font-semibold h-24 ">
+                      <td className="px-12 py-4">{item.name}</td>
+                      <td className="px-12 py-4">{item.email}</td>
+                      <td className="px-12 py-4">0555 555 55 55</td>
+                      <td className="px-12 py-4">
+                        <div className="flex justify-center">
+                          <Link
+                            href={`/dashboard/user/${item.id}`}
+                            className="mr-2"
+                          >
+                            <Image
+                              alt="edit"
+                              src="/assets/edit.svg"
+                              width={20}
+                              height={20}
+                            />
+                          </Link>
+                          <button
+                            onClick={() => handleDelete(item.id)}
+                            className="mr-2"
+                          >
+                            <Image
+                              alt="bin"
+                              src="/assets/bin.svg"
+                              width={20}
+                              height={20}
+                            />
+                          </button>
+                        </div>
+                      </td>
+                    </tr>
+                  ))
+                )}
+              </tbody>
+            </table>
+          </div>
         </div>
-      </div>
+      </Layout>
     );
   }
 };

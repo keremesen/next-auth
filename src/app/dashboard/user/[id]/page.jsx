@@ -1,7 +1,8 @@
 "use client";
-import Sidebar from "@/components/Sidebar/Sidebar";
 import React, { useEffect, useState } from "react";
-import { notFound } from "next/navigation";
+import { notFound, useRouter } from "next/navigation";
+import Layout from "@/components/Layout/Layout";
+import { useSession } from "next-auth/react";
 
 const getUser = async (id) => {
   const res = await fetch(`/api/users/${id}`, {
@@ -14,6 +15,8 @@ const getUser = async (id) => {
   return res.json();
 };
 const UserPage = ({ params }) => {
+  const router = useRouter();
+  const session = useSession();
   const [user, setUser] = useState(null);
   useEffect(() => {
     getUser(params.id).then((result) => setUser(result));
@@ -44,31 +47,40 @@ const UserPage = ({ params }) => {
       });
       res.status === 201 && alert("basarili");
     } catch (error) {
-        console.log(error)
+      console.log(error);
     }
   };
-  return (
-    <div>
-      <Sidebar />
-      <form onSubmit={handleSubmit} className="flex flex-col">
-        <label className="text-sm">Name</label>
-        <input
-          type="text"
-          defaultValue={user.name}
-          className="bg-transparent  border rounded-md p-2 mb-4"
-        />
-        <label className="text-sm">Email</label>
-        <input
-          type="text"
-          defaultValue={user.email}
-          className="bg-transparent  border rounded-md p-2"
-        />
-        <button className="bg-green-400 rounded-md p-2 text-white mt-4">
-          Update User
-        </button>
-      </form>
-    </div>
-  );
+  if (session.status === "loading") {
+    return <p>Loading...</p>;
+  }
+  if (session.status === "unauthenticated") {
+    router.push("/");
+  }
+  if (session.status === "authenticated") {
+    return (
+      <Layout>
+        <div className="flex w-full items-center justify-center">
+          <form onSubmit={handleSubmit} className="flex flex-col">
+            <label className="text-sm">Name</label>
+            <input
+              type="text"
+              defaultValue={user.name}
+              className="bg-transparent  border rounded-md p-2 mb-4"
+            />
+            <label className="text-sm">Email</label>
+            <input
+              type="text"
+              defaultValue={user.email}
+              className="bg-transparent  border rounded-md p-2"
+            />
+            <button className="bg-green-400 rounded-md p-2 text-white mt-4">
+              Update User
+            </button>
+          </form>
+        </div>
+      </Layout>
+    );
+  }
 };
 
 export default UserPage;

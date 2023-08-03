@@ -1,4 +1,5 @@
 "use client";
+import Layout from "@/components/Layout/Layout";
 import Sidebar from "@/components/Sidebar/Sidebar";
 import { signOut, useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
@@ -51,28 +52,29 @@ const Dashboard = () => {
 
   if (session.status === "authenticated") {
     return (
-      <div className="flex flex-col space-y-4">
-        <Sidebar />
-        <p> {session.data.user.email} </p>
-        <form onSubmit={handleSubmit} className="flex flex-col">
-          <label className="text-sm">Name</label>
-          <input
-            type="text"
-            defaultValue={session.data.user.name}
-            className="bg-transparent  border rounded-md p-2 mb-4"
-          />
-          <label className="text-sm">Password</label>
-          <input
-            type="password"
-            placeholder="type your new password"
-            className="bg-transparent  border rounded-md p-2"
-          />
-          <button className="bg-green-400 rounded-md p-2 text-white mt-4">
-            Update User
-          </button>
-        </form>
-        {err && "Somethgin Went Wrong!"}
-      </div>
+      <Layout>
+        <div className="flex w-full flex-col items-center  justify-center   space-y-4">
+          <p> {session.data.user.email} </p>
+          <form onSubmit={handleSubmit} className="flex flex-col">
+            <label className="text-sm">Name</label>
+            <input
+              type="text"
+              defaultValue={session.data.user.name}
+              className="bg-transparent  border rounded-md p-2 mb-4"
+            />
+            <label className="text-sm">Password</label>
+            <input
+              type="password"
+              placeholder="type your new password"
+              className="bg-transparent  border rounded-md p-2"
+            />
+            <button className="bg-green-400 rounded-md p-2 text-white mt-4">
+              Update User
+            </button>
+          </form>
+          {err && "Somethgin Went Wrong!"}
+        </div>
+      </Layout>
     );
   }
 };
