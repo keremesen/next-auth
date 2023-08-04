@@ -3,6 +3,7 @@ import React, { useEffect, useState } from "react";
 import { notFound, useRouter } from "next/navigation";
 import Layout from "@/components/Layout/Layout";
 import { useSession } from "next-auth/react";
+import Swal from "sweetalert2";
 
 const getUser = async (id) => {
   const res = await fetch(`/api/users/${id}`, {
@@ -45,7 +46,11 @@ const UserPage = ({ params }) => {
           newData,
         }),
       });
-      res.status === 201 && alert("basarili");
+      res.status === 201 && Swal.fire(
+        'Good job!',
+        'User Successfully Updated!',
+        'success'
+      )
     } catch (error) {
       console.log(error);
     }

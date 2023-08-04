@@ -8,17 +8,38 @@ import { useRouter } from "next/navigation";
 import { notFound } from "next/navigation";
 import { useState, useEffect } from "react";
 import useSWR, { mutate } from "swr";
+import Swal from 'sweetalert2'
 
 const handleDelete = async (id) => {
   try {
-    await fetch(`/api/users/${id}`, {
-      method: "DELETE",
+    const result = await Swal.fire({
+      title: 'Are you sure?',
+      text: "You won't be able to revert this!",
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Yes, delete it!'
     });
-    mutate("/api/users");
+
+    if (result.isConfirmed) {
+      await fetch(`/api/users/${id}`, {
+        method: "DELETE",
+      });
+
+      Swal.fire(
+        'Deleted!',
+        'User has been deleted.',
+        'success'
+      );
+
+      mutate("/api/users");
+    }
   } catch (error) {
     console.log(error);
   }
 };
+
 const handleEdit = async (id) => {
   try {
     await fetch(`/api/users/${id}`, {
