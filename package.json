@@ -9,7 +9,9 @@
     "lint": "next lint"
   },
   "dependencies": {
-    "@prisma/client": "^5.0.0",
+    "@auth/prisma-adapter": "^1.0.1",
+    "@hookform/resolvers": "^3.2.0",
+    "@prisma/client": "^5.1.1",
     "autoprefixer": "10.4.14",
     "bcrypt": "^5.1.0",
     "eslint": "8.45.0",
@@ -19,12 +21,16 @@
     "postcss": "8.4.27",
     "react": "18.2.0",
     "react-dom": "18.2.0",
-    "tailwindcss": "3.3.3"
+    "react-hook-form": "^7.45.4",
+    "sweetalert2": "^11.7.20",
+    "swr": "^2.2.0",
+    "tailwindcss": "3.3.3",
+    "zod": "^3.21.4"
   },
   "description": "This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).",
   "main": "next.config.js",
   "devDependencies": {
-    "prisma": "^5.0.0"
+    "prisma": "^5.1.1"
   },
   "keywords": [],
   "author": "",

@@ -5,21 +5,30 @@ import CredentialsProvider from "next-auth/providers/credentials";
 
 import bcrypt from "bcrypt";
 import prisma from "@/lib/prisma";
+import { PrismaAdapter } from "@auth/prisma-adapter";
 
 const handler = NextAuth({
+  //adapter: PrismaAdapter(prisma),
   providers: [
     GoogleProvider({
       clientId: process.env.GOOGLE_CLIENT_ID,
       clientSecret: process.env.GOOGLE_CLIENT_SECRET,
+      authorization: {
+        params: {
+          prompt: "consent",
+          access_type: "offline",
+          response_type: "code"
+        }
+      }
     }),
     GithubProvider({
       clientId: process.env.GITHUB_ID,
       clientSecret: process.env.GITHUB_SECRET,
     }),
     CredentialsProvider({
-      id: "credentials",
       email: "credentials",
-      
+      password: "credentials",
+
       async authorize(credentials) {
         try {
           const user = await prisma.users.findUnique({
@@ -34,7 +43,8 @@ const handler = NextAuth({
               user.password
             );
             if (isPasswordCorrect) {
-              return user;
+              const { id, email, phone, name } = user;
+              return { id, email, phone, name };
             } else {
               throw new Error("Wrong Credentials!");
             }
@@ -47,6 +57,12 @@ const handler = NextAuth({
       },
     }),
   ],
+  // callbacks: {
+  //   session({ session, user }) {
+  //     session.user.role = user.role
+  //     return session
+  //   }
+  // },
   pages: {
     error: "/",
   },

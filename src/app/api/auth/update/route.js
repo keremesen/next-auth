@@ -17,7 +17,7 @@ export const POST = async (req) => {
       },
       data: newData,
     });
-    return new NextResponse("User update succesfully", { status: 201 });
+    return new NextResponse("User updated succesfully", { status: 201 });
   } catch (error) {
     return new NextResponse(error, { status: 500 });
   }
