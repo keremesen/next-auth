@@ -8,18 +8,18 @@ import { useRouter } from "next/navigation";
 import { notFound } from "next/navigation";
 import { useState, useEffect } from "react";
 import useSWR, { mutate } from "swr";
-import Swal from 'sweetalert2'
+import Swal from "sweetalert2";
 
 const handleDelete = async (id) => {
   try {
     const result = await Swal.fire({
-      title: 'Are you sure?',
+      title: "Are you sure?",
       text: "You won't be able to revert this!",
-      icon: 'warning',
+      icon: "warning",
       showCancelButton: true,
-      confirmButtonColor: '#3085d6',
-      cancelButtonColor: '#d33',
-      confirmButtonText: 'Yes, delete it!'
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Yes, delete it!",
     });
 
     if (result.isConfirmed) {
@@ -27,11 +27,7 @@ const handleDelete = async (id) => {
         method: "DELETE",
       });
 
-      Swal.fire(
-        'Deleted!',
-        'User has been deleted.',
-        'success'
-      );
+      Swal.fire("Deleted!", "User has been deleted.", "success");
 
       mutate("/api/users");
     }
@@ -83,6 +79,9 @@ const Dashboard = () => {
                   <th scope="col" className="px-12 py-4">
                     PHONE
                   </th>
+                  <th scope="col" className="px-12 py-4">
+                    ROLE
+                  </th>
                   <th scope="col" className="px-12 py-4"></th>
                 </tr>
               </thead>
@@ -98,7 +97,10 @@ const Dashboard = () => {
                     <tr key={idx} className="border-b font-semibold h-24 ">
                       <td className="px-12 py-4">{item.name}</td>
                       <td className="px-12 py-4">{item.email}</td>
-                      <td className="px-12 py-4">0555 555 55 55</td>
+                      <td className="px-12 py-4">{item.phone}</td>
+                      <td className="px-12 py-4">
+                        {item.role ? "Admin" : "Member"}
+                      </td>
                       <td className="px-12 py-4">
                         <div className="flex justify-center">
                           <Link

@@ -4,6 +4,7 @@ import Sidebar from "@/components/Sidebar/Sidebar";
 import { signOut, useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
+import Swal from "sweetalert2";
 
 const Dashboard = () => {
   const session = useSession();
@@ -21,7 +22,8 @@ const Dashboard = () => {
     e.preventDefault();
     const email = session.data.user.email;
     const name = e.target[0].value;
-    const password = e.target[1].value;
+    const phone = e.target[1].value;
+    const password = e.target[2].value;
 
     const newData = {};
 
@@ -29,6 +31,9 @@ const Dashboard = () => {
       newData.name = name;
     }
 
+    if (phone) {
+      newData.phone = phone;
+    }
     if (password) {
       newData.password = password;
     }
@@ -44,7 +49,8 @@ const Dashboard = () => {
           newData,
         }),
       });
-      res.status === 201 && alert("basarili");
+      res.status === 201 &&
+        Swal.fire("Good job!", "User Successfully Updated!", "success");
     } catch (error) {
       setErr(true);
     }
@@ -54,12 +60,17 @@ const Dashboard = () => {
     return (
       <Layout>
         <div className="flex w-full flex-col items-center  justify-center   space-y-4">
-          <p> {session.data.user.email} </p>
           <form onSubmit={handleSubmit} className="flex flex-col">
             <label className="text-sm">Name</label>
             <input
               type="text"
               defaultValue={session.data.user.name}
+              className="bg-transparent  border rounded-md p-2 mb-4"
+            />
+            <label className="text-sm">Phone</label>
+            <input
+              type="text"
+              defaultValue={session.data.user.phone}
               className="bg-transparent  border rounded-md p-2 mb-4"
             />
             <label className="text-sm">Password</label>

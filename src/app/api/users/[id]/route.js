@@ -6,7 +6,7 @@ export const DELETE = async (req, { params }) => {
   try {
     await prisma.users.delete({
       where: {
-        id: Number(id),
+        id: id,
       },
     });
     return new NextResponse("User has been deleted", { status: 200 });
@@ -21,7 +21,7 @@ export const GET = async (req, { params }) => {
   try {
     const user = await prisma.users.findUnique({
       where: {
-        id: Number(id),
+        id: id,
       },
     });
     return new NextResponse(JSON.stringify(user), { status: 201 });
@@ -35,7 +35,7 @@ export const POST = async (req, { params }) => {
   try {
     await prisma.users.update({
       where: {
-        id: Number(id),
+        id: id,
       },
       data: newData,
     });

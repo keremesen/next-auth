@@ -27,14 +27,26 @@ const UserPage = ({ params }) => {
     return <p>Loading...</p>;
   }
 
+  function handleRoleChange(e) {
+    const selectedRole = e.target.value;
+    setUser((prevUser) => ({
+      ...prevUser,
+      role: selectedRole,
+    }));
+  }
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     const name = e.target[0].value;
-    const email = e.target[1].value;
+    const phone = e.target[1].value;
+    const email = e.target[2].value;
+    const role = Boolean(user.role);
 
     const newData = {
       name: name,
+      phone: phone,
       email: email,
+      role: role,
     };
     try {
       const res = await fetch(`/api/users/${params.id}`, {
@@ -46,11 +58,8 @@ const UserPage = ({ params }) => {
           newData,
         }),
       });
-      res.status === 201 && Swal.fire(
-        'Good job!',
-        'User Successfully Updated!',
-        'success'
-      )
+      res.status === 201 &&
+        Swal.fire("Good job!", "User Successfully Updated!", "success");
     } catch (error) {
       console.log(error);
     }
@@ -72,12 +81,27 @@ const UserPage = ({ params }) => {
               defaultValue={user.name}
               className="bg-transparent  border rounded-md p-2 mb-4"
             />
+            <label className="text-sm">Phone</label>
+            <input
+              type="text"
+              defaultValue={user.phone}
+              className="bg-transparent  border rounded-md p-2 mb-4"
+            />
             <label className="text-sm">Email</label>
             <input
               type="text"
               defaultValue={user.email}
               className="bg-transparent  border rounded-md p-2"
             />
+            <label className="text-sm">Role</label>
+            <select
+              defaultValue={user.role}
+              onChange={handleRoleChange}
+              className="bg-transparent  border rounded-md p-2 focus:outline-none"
+            >
+              <option value={true}>Admin</option>
+              <option value={false}>Member</option>
+            </select>
             <button className="bg-green-400 rounded-md p-2 text-white mt-4">
               Update User
             </button>
