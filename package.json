@@ -30,6 +30,7 @@
   "description": "This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).",
   "main": "next.config.js",
   "devDependencies": {
+    "nodemailer": "^6.9.4",
     "prisma": "^5.1.1"
   },
   "keywords": [],

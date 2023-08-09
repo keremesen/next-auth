@@ -68,6 +68,13 @@ export default function Home() {
           <span>Login With Google</span>
         </button>
         <button
+          className=" p-2 w-full  rounded-md bg-blue-300 text-white text-sm items-center flex justify-center space-x-2"
+          onClick={() => signIn("email")}
+        >
+          {/* <Image src="/assets/github.svg" width={20} height={20} alt="Email" /> */}
+          <span>Login With Email</span>
+        </button>
+        <button
           className=" p-2 w-full  rounded-md bg-gray-800 text-white text-sm items-center flex justify-center space-x-2"
           onClick={() => signIn("github")}
         >
