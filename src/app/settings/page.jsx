@@ -67,8 +67,6 @@ const Dashboard = () => {
               defaultValue={session.data.user.name}
               className="bg-transparent  border rounded-md p-2 mb-4"
             />
-            {session.data.user.role+"asdq           "}
-            {session.data.user.phone+"asdq"}
             <label className="text-sm">Phone</label>
             <input
               type="text"

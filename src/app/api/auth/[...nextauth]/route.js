@@ -2,11 +2,11 @@ import NextAuth from "next-auth";
 import GoogleProvider from "next-auth/providers/google";
 import GithubProvider from "next-auth/providers/github";
 import CredentialsProvider from "next-auth/providers/credentials";
-import EmailProvider from "next-auth/providers/email"
+import EmailProvider from "next-auth/providers/email";
 
 import bcrypt from "bcrypt";
-import prisma from "@/lib/prisma";
-import { PrismaAdapter } from "@auth/prisma-adapter";
+import { prisma } from "@/lib/prisma";
+import { PrismaAdapter } from "@next-auth/prisma-adapter";
 
 const handler = NextAuth({
   providers: [
@@ -17,9 +17,9 @@ const handler = NextAuth({
         params: {
           prompt: "consent",
           access_type: "offline",
-          response_type: "code"
-        }
-      }
+          response_type: "code",
+        },
+      },
     }),
     EmailProvider({
       server: {
@@ -54,10 +54,7 @@ const handler = NextAuth({
               user.password
             );
             if (isPasswordCorrect) {
-              console.log(user.role)
-              console.log(user.phone)
-              const { id, email, phone, name,role } = user;
-              return user
+              return user;
             } else {
               throw new Error("Wrong Credentials!");
             }
@@ -70,40 +67,29 @@ const handler = NextAuth({
       },
     }),
   ],
- adapter: PrismaAdapter(prisma),
- callbacks: {
-  async jwt(token, user) {
-    // user is the user object returned from the authorize function in credentials provider
-    // token is the existing token object which will be updated
-    if (user?.role) {
-      token.role = user.role;
-    }
-    return token;
+  adapter: PrismaAdapter(prisma),
+  session: {
+    strategy: "jwt",
   },
-  async session(session, token) {
-    // session is the current session object
-    // token is the token object in the jwt callback
-    if (token?.role) {
-      session.user.role = token.role;
-    }
-    return session;
+  callbacks: {
+    async jwt({token}) {
+      const userInDb= await prisma.users.findUnique({
+        where: {
+          email: token.email,
+        },
+      });
+      token.isAdmin = userInDb?.role;
+      token.phone = userInDb?.phone
+      return token;
+    },
+    async session({session, token}) {
+      if (token) {
+        session.user.isAdmin = token.isAdmin;
+        session.user.phone = token.phone;
+      }
+      return session;
+    },
   },
-},
-
-  // callbacks: {
-  //   session({ session, user }) {
-  //     console.log(session)
-  //     console.log(user)
-  //     // session.user.role = user.role
-  //     // return session
-  //   }
-  // },
-  // callbacks: {
-  //   async jwt({ token }) {
-  //    console.log(token)    
-      
-  //   },
-  // },
   pages: {
     error: "/",
   },
