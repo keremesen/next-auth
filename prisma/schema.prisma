@@ -8,14 +8,12 @@ datasource db {
 }
 
 model users {
-  id       String    @id @default(cuid())
-  email    String?   @unique
-  password String?
-  name     String?
-  phone    String?
-  role     Boolean?  @default(false)
-  accounts Account[]
-  sessions Session[]
+  id       String  @id @default(cuid())
+  email    String  @unique
+  password String
+  name     String
+  phone    String
+  role     Boolean @default(false)
 }
 
 model Account {
@@ -32,9 +30,7 @@ model Account {
   id_token          String? @db.Text
   session_state     String?
 
-  user    User    @relation(fields: [userId], references: [id], onDelete: Cascade)
-  users   users?  @relation(fields: [usersId], references: [id])
-  usersId String?
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@unique([provider, providerAccountId])
 }
@@ -45,8 +41,6 @@ model Session {
   userId       String
   expires      DateTime
   user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-  users        users?   @relation(fields: [usersId], references: [id])
-  usersId      String?
 }
 
 model User {
@@ -55,8 +49,7 @@ model User {
   email         String?   @unique
   emailVerified DateTime?
   image         String?
-  password      String?
-  role          Boolean?
+  isAdmin       Boolean   @default(false)
   accounts      Account[]
   sessions      Session[]
 }
